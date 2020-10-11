@@ -10,3 +10,7 @@ export interface MenuItem {
 export interface MenuItemListData {
   menuItems: MenuItem[];
 }
+
+export interface MenuItemData {
+  menuItem: MenuItem;
+}

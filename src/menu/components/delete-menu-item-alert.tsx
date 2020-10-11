@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 
 import {
-  GET_MENU_QUERY,
+  GET_MENU_ITEMS,
   REMOVE_MENU_ITEM,
 } from 'menu/menu-queries-and-mutations';
 
@@ -49,12 +49,12 @@ const DeleteAlert: React.FC<DeleteAlertProps> = ({
     {
       update(cache, { data: { removeMenuItem } }) {
         const menuItemsData = cache.readQuery<MenuItemListData>({
-          query: GET_MENU_QUERY,
+          query: GET_MENU_ITEMS,
         });
 
         if (menuItemsData?.menuItems) {
           cache.writeQuery({
-            query: GET_MENU_QUERY,
+            query: GET_MENU_ITEMS,
             data: {
               menuItems: [
                 ...menuItemsData.menuItems.filter(

@@ -15,6 +15,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteAlert from 'menu/components/delete-menu-item-alert';
 
 import { MenuItem } from 'menu/menu.types';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
   itemInfo: {
@@ -32,8 +33,10 @@ const useStyles = makeStyles({
 });
 
 const ListItem: React.FC<Omit<MenuItem, '__typename'>> = (props) => {
-  const classes = useStyles();
   const { id, name, price, image, type } = props;
+
+  const classes = useStyles();
+  const history = useHistory();
 
   const [isDeleteAlertOpen, setDeleteAlertOpen] = useState(false);
 
@@ -65,7 +68,10 @@ const ListItem: React.FC<Omit<MenuItem, '__typename'>> = (props) => {
               {name}
 
               <span>
-                <IconButton aria-label="Edit menu item">
+                <IconButton
+                  aria-label="Edit menu item"
+                  onClick={() => history.push(`/menu/${id}`)}
+                >
                   <EditIcon />
                 </IconButton>
                 <IconButton

@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { CREATE_MENU_ITEM, GET_MENU_QUERY } from './menu-queries-and-mutations';
+import { CREATE_MENU_ITEM, GET_MENU_ITEMS } from './menu-queries-and-mutations';
 
 import { MenuItemListData } from './menu.types';
 
@@ -52,12 +52,12 @@ const AddMenuItem = () => {
   const [createMenuItem, newAddedMenuItem] = useMutation(CREATE_MENU_ITEM, {
     update(cache, { data: { newMenuItem } }) {
       const menuItemsData = cache.readQuery<MenuItemListData>({
-        query: GET_MENU_QUERY,
+        query: GET_MENU_ITEMS,
       });
 
       if (menuItemsData?.menuItems) {
         cache.writeQuery({
-          query: GET_MENU_QUERY,
+          query: GET_MENU_ITEMS,
           data: { menuItems: [...menuItemsData.menuItems, newMenuItem] },
         });
       }
