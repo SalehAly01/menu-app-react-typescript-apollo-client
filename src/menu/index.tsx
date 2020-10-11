@@ -1,21 +1,30 @@
 import React from 'react';
 import { gql, useQuery } from '@apollo/client';
+import {
+  CircularProgress,
+  Grid,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 
-interface MenuItemListData {
-  menuItems: {
-    _id: string;
-    name: string;
-    price: number;
-    type: 'MAIN_COURSE' | 'SIDE';
-    image: string;
-    __typename: 'MenuItem';
-  }[];
-}
+import { MenuItemListData } from './menu.types';
+import ListItem from './list-item';
+
+const useStyles = makeStyles({
+  menuHeader: { marginBottom: 50 },
+  menuWrapper: { padding: '50px 150px' },
+  spinnerWrapper: {
+    height: 400,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 const GET_MENU_QUERY = gql`
   query menuItemList {
     menuItems {
-      _id
+      id: _id
       name
       price
       type
@@ -25,12 +34,49 @@ const GET_MENU_QUERY = gql`
 `;
 
 const Menu = () => {
+  const classes = useStyles();
   const { data, loading, error } = useQuery<MenuItemListData>(GET_MENU_QUERY);
 
-  if (loading) return <p>Loading</p>;
-  if (error) return <p>ERROR</p>;
+  return (
+    <div className={classes.menuWrapper}>
+      <Typography variant="h5" className={classes.menuHeader}>
+        Menu
+      </Typography>
 
-  return <div>Menu Page</div>;
+      {loading ? (
+        <div className={classes.spinnerWrapper}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <>
+          {error ? (
+            <Typography variant="h5" gutterBottom color="error" align="center">
+              Oops something went wrong!
+            </Typography>
+          ) : (
+            <>
+              {data?.menuItems.length ? (
+                <Grid container spacing={4} justify="flex-start">
+                  {data?.menuItems.map(({ name, price, image, type, id }) => (
+                    <ListItem key={id} {...{ id, name, price, image, type }} />
+                  ))}
+                </Grid>
+              ) : (
+                <Typography
+                  variant="h5"
+                  gutterBottom
+                  color="error"
+                  align="center"
+                >
+                  Your menu is empty, start adding items!
+                </Typography>
+              )}
+            </>
+          )}
+        </>
+      )}
+    </div>
+  );
 };
 
 export default Menu;

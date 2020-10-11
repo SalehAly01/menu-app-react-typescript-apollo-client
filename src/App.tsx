@@ -16,7 +16,7 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       backgroundColor: '#F0F0F7',
-      height: '100vh',
+      height: '100%',
     },
     appBar: { backgroundColor: '#fff' },
     title: {
@@ -32,7 +32,7 @@ const App = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" className={classes.appBar}>
+      <AppBar position="sticky" className={classes.appBar}>
         <Toolbar>
           <Typography
             variant="h6"
