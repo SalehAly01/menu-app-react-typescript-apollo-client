@@ -4,10 +4,10 @@ import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 
 import client from 'client';
-import App from './App';
+import App from 'App';
 
-import './index.css';
-import * as serviceWorker from './serviceWorker';
+import 'index.css';
+import * as serviceWorker from 'serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>

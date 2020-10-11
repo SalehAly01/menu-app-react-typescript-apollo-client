@@ -10,7 +10,7 @@ import {
 
 import Menu from 'menu';
 
-import './App.css';
+import 'App.css';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -48,7 +48,7 @@ const App = () => {
       <Switch>
         <Redirect from="/" exact to="/menu" />
 
-        <Route exact path="/menu" component={Menu} />
+        <Route path="/menu" component={Menu} />
       </Switch>
     </div>
   );

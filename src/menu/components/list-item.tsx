@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { MenuItem } from './menu.types';
+import { MenuItem } from 'menu/menu.types';
 
 const useStyles = makeStyles({
   itemInfo: { display: 'flex', justifyContent: 'space-between' },
