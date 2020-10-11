@@ -27,3 +27,12 @@ export const CREATE_MENU_ITEM = gql`
   }
   ${MENU_ITEM_DETAILS}
 `;
+
+export const REMOVE_MENU_ITEM = gql`
+  mutation RemoveMenuItem($id: ID!) {
+    removeMenuItem(id: $id) {
+      ...ItemDetails
+    }
+  }
+  ${MENU_ITEM_DETAILS}
+`;

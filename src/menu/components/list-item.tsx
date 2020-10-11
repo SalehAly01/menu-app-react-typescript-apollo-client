@@ -1,25 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
   Grid,
+  IconButton,
   makeStyles,
   Typography,
 } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+
+import DeleteAlert from 'menu/components/delete-menu-item-alert';
 
 import { MenuItem } from 'menu/menu.types';
 
 const useStyles = makeStyles({
-  itemInfo: { display: 'flex', justifyContent: 'space-between' },
+  itemInfo: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginRight: 15,
+  },
   media: { minHeight: 200, backgroundColor: '#43425D' },
   cardData: { padding: '20px 30px' },
+  itemNameAndActions: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
 });
 
 const ListItem: React.FC<Omit<MenuItem, '__typename'>> = (props) => {
   const classes = useStyles();
-  const { name, price, image, type } = props;
+  const { id, name, price, image, type } = props;
+
+  const [isDeleteAlertOpen, setDeleteAlertOpen] = useState(false);
 
   return (
     <Grid item xs={12} sm={6} md={4}>
@@ -41,12 +57,34 @@ const ListItem: React.FC<Omit<MenuItem, '__typename'>> = (props) => {
               {type} <span>{price}$</span>
             </Typography>
 
-            <Typography variant="h5" component="h2">
+            <Typography
+              variant="h5"
+              component="h2"
+              className={classes.itemNameAndActions}
+            >
               {name}
+
+              <span>
+                <IconButton aria-label="Edit menu item">
+                  <EditIcon />
+                </IconButton>
+                <IconButton
+                  aria-label="Delete menu item"
+                  onClick={() => setDeleteAlertOpen(true)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </span>
             </Typography>
           </CardContent>
         </CardActionArea>
       </Card>
+
+      <DeleteAlert
+        isOpen={isDeleteAlertOpen}
+        setOpen={setDeleteAlertOpen}
+        toBeDeletedId={id}
+      />
     </Grid>
   );
 };

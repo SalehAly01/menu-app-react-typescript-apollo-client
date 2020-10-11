@@ -7,6 +7,8 @@ import {
   Grid,
   makeStyles,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@material-ui/core';
 
 import { GET_MENU_QUERY } from 'menu/menu-queries-and-mutations';
@@ -21,7 +23,7 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
   },
-  menuWrapper: { maxWidth: 1200, margin: '50px auto' },
+  menuWrapper: { maxWidth: 1200, margin: '50px auto', padding: '0 25px' },
   spinnerWrapper: {
     height: 400,
     display: 'flex',
@@ -35,6 +37,8 @@ const MenuItemList = () => {
   const { data, loading, error } = useQuery<MenuItemListData>(GET_MENU_QUERY);
 
   const menuHasData = !!data?.menuItems.length;
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <div className={classes.menuWrapper}>
@@ -63,7 +67,7 @@ const MenuItemList = () => {
           ) : (
             <>
               {menuHasData ? (
-                <Grid container spacing={4} justify="flex-start">
+                <Grid container spacing={isSmall ? 2 : 4} justify="flex-start">
                   {data?.menuItems.map(({ name, price, image, type, id }) => (
                     <ListItem key={id} {...{ id, name, price, image, type }} />
                   ))}
@@ -72,7 +76,7 @@ const MenuItemList = () => {
                 <Typography
                   variant="h5"
                   gutterBottom
-                  color="error"
+                  color="textSecondary"
                   align="center"
                 >
                   Your menu is empty, start adding items!

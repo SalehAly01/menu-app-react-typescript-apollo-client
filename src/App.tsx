@@ -10,8 +10,6 @@ import {
 
 import Menu from 'menu';
 
-import 'App.css';
-
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
