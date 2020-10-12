@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Button,
   CircularProgress,
@@ -9,6 +9,9 @@ import {
   Select,
   TextField,
 } from '@material-ui/core';
+
+import ImageUploadContext from 'menu/image-upload-context';
+import ImageUploader from 'menu/components/image-uploader';
 
 import { ItemType } from 'menu/menu.types';
 
@@ -45,6 +48,8 @@ const MenuItemForm: React.FC<MenuItemProps> = (props) => {
     itemPrice,
     setItemPrice,
   } = props;
+  const { isImageUploading } = useContext(ImageUploadContext);
+
   const classes = useStyles();
 
   return (
@@ -111,6 +116,8 @@ const MenuItemForm: React.FC<MenuItemProps> = (props) => {
             }}
           />
         </FormControl>
+
+        <ImageUploader />
       </div>
 
       {isSaving ? (
@@ -120,7 +127,7 @@ const MenuItemForm: React.FC<MenuItemProps> = (props) => {
           variant="contained"
           color="primary"
           type="submit"
-          disabled={isSaving}
+          disabled={isSaving || isImageUploading}
         >
           {isEditForm ? 'Save Updates' : 'Save Item'}
         </Button>

@@ -13,7 +13,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
-import DeleteAlert from 'menu/components/delete-menu-item-alert';
+import DeleteAlert from 'menu/components/delete-item-alert';
 
 import { MenuItem } from 'menu/menu.types';
 
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
     justifyContent: 'space-between',
     marginRight: 15,
   },
-  media: { minHeight: 200, backgroundColor: '#43425D' },
+  media: { height: 200, backgroundColor: '#43425D' },
   cardData: { padding: '20px 30px' },
   itemNameAndActions: {
     display: 'flex',
@@ -45,6 +45,8 @@ const ListItem: React.FC<Omit<MenuItem, '__typename'>> = (props) => {
       <Card>
         <CardActionArea>
           <CardMedia
+            component="img"
+            loading="lazy"
             className={classes.media}
             image={image}
             title={`${name} image`}

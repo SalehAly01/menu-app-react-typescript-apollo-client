@@ -8,6 +8,7 @@ import {
   GET_MENU_ITEMS,
 } from 'menu/menu-queries-and-mutations';
 
+import ImageUploadContext from 'menu/image-upload-context';
 import MenuItemForm from 'menu/components/menu-item-form';
 
 import { ItemType, MenuItemListData } from 'menu/menu.types';
@@ -29,6 +30,8 @@ const AddMenuItem = () => {
   const [itemType, setItemType] = useState<ItemType>();
   const [itemName, setItemName] = useState<string>();
   const [itemPrice, setItemPrice] = useState<number>();
+  const [itemImage, setItemImage] = useState<string>();
+  const [isImageUploading, setImageUploading] = useState(false);
 
   const [createMenuItem, newAddedMenuItem] = useMutation(CREATE_MENU_ITEM, {
     update(cache, { data: { newMenuItem } }) {
@@ -46,11 +49,18 @@ const AddMenuItem = () => {
   });
 
   const handleSubmit = () => {
-    createMenuItem({
-      variables: {
-        input: { name: itemName, price: itemPrice, type: itemType },
-      },
-    }).then(() => history.goBack());
+    if (!isImageUploading) {
+      createMenuItem({
+        variables: {
+          input: {
+            name: itemName,
+            price: itemPrice,
+            type: itemType,
+            image: itemImage,
+          },
+        },
+      }).then(() => history.goBack());
+    }
   };
 
   return (
@@ -59,18 +69,27 @@ const AddMenuItem = () => {
         Add Menu Item
       </Typography>
 
-      <MenuItemForm
-        {...{
-          handleSubmit,
-          isSaving: newAddedMenuItem.loading,
-          itemType,
-          setItemType,
-          itemName,
-          setItemName,
-          itemPrice,
-          setItemPrice,
+      <ImageUploadContext.Provider
+        value={{
+          itemImage,
+          setItemImage,
+          isImageUploading,
+          setImageUploading,
         }}
-      />
+      >
+        <MenuItemForm
+          {...{
+            handleSubmit,
+            isSaving: newAddedMenuItem.loading,
+            itemType,
+            setItemType,
+            itemName,
+            setItemName,
+            itemPrice,
+            setItemPrice,
+          }}
+        />
+      </ImageUploadContext.Provider>
     </div>
   );
 };

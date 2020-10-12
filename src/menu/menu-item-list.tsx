@@ -12,7 +12,7 @@ import {
 import client from 'client';
 import { GET_MENU_ITEMS } from 'menu/menu-queries-and-mutations';
 
-import ListItem from 'menu/components/list-item';
+import ListItem from 'menu/components/menu-list-item';
 
 import { MenuItemListData } from 'menu/menu.types';
 

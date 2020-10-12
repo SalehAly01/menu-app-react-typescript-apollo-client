@@ -46,6 +46,14 @@ export const UPDATE_MENU_ITEM = gql`
   ${MENU_ITEM_DETAILS}
 `;
 
+export const UPLOAD_ITEM_IMAGE = gql`
+  mutation UploadItemImage($file: Upload!) {
+    uploadImage(file: $file) {
+      Location
+    }
+  }
+`;
+
 export const REMOVE_MENU_ITEM = gql`
   mutation RemoveMenuItem($id: ID!) {
     removeMenuItem(id: $id) {

@@ -15,6 +15,7 @@ import {
   UPDATE_MENU_ITEM,
 } from 'menu/menu-queries-and-mutations';
 
+import ImageUploadContext from 'menu/image-upload-context';
 import MenuItemForm from 'menu/components/menu-item-form';
 
 import { ItemType, MenuItemData, MenuItemListData } from 'menu/menu.types';
@@ -48,12 +49,15 @@ const EditMenuItem = () => {
   const [itemType, setItemType] = useState<ItemType>();
   const [itemName, setItemName] = useState<string>();
   const [itemPrice, setItemPrice] = useState<number>();
+  const [itemImage, setItemImage] = useState<string>();
+  const [isImageUploading, setImageUploading] = useState(false);
 
   useEffect(() => {
     if (data?.menuItem) {
       setItemName(data.menuItem.name);
       setItemType(ItemType[data.menuItem.type]);
       setItemPrice(data.menuItem.price);
+      setItemImage(data.menuItem.image);
     }
   }, [data]);
 
@@ -86,12 +90,14 @@ const EditMenuItem = () => {
   );
 
   const handleSubmit = () => {
-    handleUpdateMenuItem({
-      variables: {
-        id: itemId,
-        input: { name: itemName, price: itemPrice },
-      },
-    }).then(() => history.goBack());
+    if (!isImageUploading) {
+      handleUpdateMenuItem({
+        variables: {
+          id: itemId,
+          input: { name: itemName, price: itemPrice, image: itemImage },
+        },
+      }).then(() => history.goBack());
+    }
   };
 
   return (
@@ -106,19 +112,28 @@ const EditMenuItem = () => {
             Edit Menu Item
           </Typography>
 
-          <MenuItemForm
-            {...{
-              handleSubmit,
-              isSaving: updatedMenuItem.loading,
-              isEditForm: true,
-              itemType,
-              setItemType,
-              itemName,
-              setItemName,
-              itemPrice,
-              setItemPrice,
+          <ImageUploadContext.Provider
+            value={{
+              itemImage,
+              setItemImage,
+              isImageUploading,
+              setImageUploading,
             }}
-          />
+          >
+            <MenuItemForm
+              {...{
+                handleSubmit,
+                isSaving: updatedMenuItem.loading,
+                isEditForm: true,
+                itemType,
+                setItemType,
+                itemName,
+                setItemName,
+                itemPrice,
+                setItemPrice,
+              }}
+            />
+          </ImageUploadContext.Provider>
         </div>
       )}
     </>
