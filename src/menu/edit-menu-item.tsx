@@ -2,14 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import {
-  Button,
   CircularProgress,
-  FormControl,
-  InputLabel,
+  createStyles,
   makeStyles,
-  MenuItem,
-  Select,
-  TextField,
+  Theme,
   Typography,
 } from '@material-ui/core';
 
@@ -17,33 +13,27 @@ import {
   GET_MENU_ITEM,
   GET_MENU_ITEMS,
   UPDATE_MENU_ITEM,
-} from './menu-queries-and-mutations';
+} from 'menu/menu-queries-and-mutations';
 
-import { MenuItemData, MenuItemListData } from './menu.types';
+import MenuItemForm from 'menu/components/menu-item-form';
 
-const useStyles = makeStyles({
-  addHeader: {
-    marginBottom: 30,
-  },
-  addWrapper: { padding: '50px 150px' },
-  spinnerWrapper: {
-    height: 400,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  formWarpper: {
-    display: 'flex',
-    flexDirection: 'column',
-    maxWidth: 500,
-    marginBottom: 30,
-  },
-});
+import { ItemType, MenuItemData, MenuItemListData } from 'menu/menu.types';
 
-enum ItemType {
-  MAIN_COURSE = 'MAIN_COURSE',
-  SIDE = 'SIDE',
-}
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    editHeader: { marginBottom: 30 },
+    editWrapper: {
+      padding: '50px 150px',
+      [theme.breakpoints.down('sm')]: { padding: 25 },
+    },
+    spinnerWrapper: {
+      height: 400,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  })
+);
 
 const EditMenuItem = () => {
   const classes = useStyles();
@@ -67,7 +57,7 @@ const EditMenuItem = () => {
     }
   }, [data]);
 
-  const [handleUpdateMenuItem, updatedAddedMenuItem] = useMutation(
+  const [handleUpdateMenuItem, updatedMenuItem] = useMutation(
     UPDATE_MENU_ITEM,
     {
       update(cache, { data: { updateMenuItem } }) {
@@ -111,88 +101,24 @@ const EditMenuItem = () => {
           <CircularProgress />
         </div>
       ) : (
-        <div className={classes.addWrapper}>
-          <Typography variant="h5" className={classes.addHeader}>
+        <div className={classes.editWrapper}>
+          <Typography variant="h5" className={classes.editHeader}>
             Edit Menu Item
           </Typography>
 
-          <form autoComplete="off" onSubmit={handleSubmit}>
-            <div className={classes.formWarpper}>
-              <FormControl required fullWidth>
-                <InputLabel id="menu-item-type">Type</InputLabel>
-                <Select
-                  labelId="menu-item-type"
-                  id="menu-item-type-select"
-                  MenuProps={{
-                    anchorOrigin: {
-                      vertical: 'bottom',
-                      horizontal: 'left',
-                    },
-                    getContentAnchorEl: null,
-                  }}
-                  value={itemType || ''}
-                  disabled
-                  onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
-                    setItemType(event.target.value as ItemType);
-                  }}
-                >
-                  <MenuItem value={ItemType.MAIN_COURSE}>Main Course</MenuItem>
-                  <MenuItem value={ItemType.SIDE}>Side</MenuItem>
-                </Select>
-              </FormControl>
-
-              <TextField
-                required
-                label="Name"
-                value={itemName || ''}
-                onChange={(
-                  event: React.ChangeEvent<
-                    HTMLTextAreaElement | HTMLInputElement
-                  >
-                ) => setItemName(event.target.value)}
-              />
-              <TextField
-                required
-                label="Price"
-                value={itemPrice || ''}
-                type="number"
-                InputProps={{
-                  inputProps: { min: 1 },
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === 'e') {
-                    event.preventDefault();
-                  }
-                }}
-                onChange={(
-                  event: React.ChangeEvent<
-                    HTMLTextAreaElement | HTMLInputElement
-                  >
-                ) => {
-                  const numericValue = Number(event.target.value);
-
-                  if (numericValue > 0 && event.target) {
-                    setItemPrice(numericValue);
-                  } else {
-                    setItemPrice(undefined);
-                  }
-                }}
-              />
-            </div>
-
-            {updatedAddedMenuItem.loading ? (
-              <CircularProgress />
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={updatedAddedMenuItem.loading}
-              >
-                Save Updates
-              </Button>
-            )}
-          </form>
+          <MenuItemForm
+            {...{
+              handleSubmit,
+              isSaving: updatedMenuItem.loading,
+              isEditForm: true,
+              itemType,
+              setItemType,
+              itemName,
+              setItemName,
+              itemPrice,
+              setItemPrice,
+            }}
+          />
         </div>
       )}
     </>

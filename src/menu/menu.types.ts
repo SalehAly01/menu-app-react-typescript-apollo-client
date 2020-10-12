@@ -1,8 +1,13 @@
+export enum ItemType {
+  MAIN_COURSE = 'MAIN_COURSE',
+  SIDE = 'SIDE',
+}
+
 export interface MenuItem {
   id: string;
   name: string;
   price: number;
-  type: 'MAIN_COURSE' | 'SIDE';
+  type: ItemType;
   image: string;
   __typename: 'MenuItem';
 }

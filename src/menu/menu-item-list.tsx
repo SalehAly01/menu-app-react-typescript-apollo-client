@@ -27,18 +27,19 @@ const useStyles = makeStyles({
 
 const MenuItemList = () => {
   const classes = useStyles();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   const menuItemsData = client.readQuery<MenuItemListData>({
     query: GET_MENU_ITEMS,
   });
 
   const menuHasData = !!menuItemsData?.menuItems.length;
-  const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <div className={classes.menuWrapper}>
       <Typography variant="h5" className={classes.menuHeader}>
-        Menu{' '}
+        Menu
         <Button
           variant="contained"
           color="primary"
@@ -50,7 +51,7 @@ const MenuItemList = () => {
       </Typography>
 
       {menuHasData ? (
-        <Grid container spacing={isSmall ? 2 : 4} justify="flex-start">
+        <Grid container spacing={isSmallScreen ? 2 : 4} justify="flex-start">
           {menuItemsData?.menuItems.map(({ name, price, image, type, id }) => (
             <ListItem key={id} {...{ id, name, price, image, type }} />
           ))}

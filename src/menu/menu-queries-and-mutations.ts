@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const MENU_ITEM_DETAILS = gql`
+const MENU_ITEM_DETAILS = gql`
   fragment ItemDetails on MenuItem {
     id: _id
     name

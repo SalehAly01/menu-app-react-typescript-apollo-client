@@ -37,14 +37,11 @@ interface DeleteAlertProps {
   toBeDeletedId: string;
 }
 
-const DeleteAlert: React.FC<DeleteAlertProps> = ({
-  isOpen,
-  setOpen,
-  toBeDeletedId,
-}) => {
+const DeleteAlert: React.FC<DeleteAlertProps> = (props) => {
+  const { isOpen, setOpen, toBeDeletedId } = props;
   const classes = useStyles();
 
-  const [handleRemoveMenuItem, removedAddedMenuItem] = useMutation(
+  const [handleRemoveMenuItem, removedMenuItem] = useMutation(
     REMOVE_MENU_ITEM,
     {
       update(cache, { data: { removeMenuItem } }) {
@@ -68,12 +65,12 @@ const DeleteAlert: React.FC<DeleteAlertProps> = ({
     }
   );
 
+  const closeModal = () => setOpen(false);
+
   const handleDelete = () => {
     handleRemoveMenuItem({
       variables: { id: toBeDeletedId },
-    }).then(() => {
-      setOpen(false);
-    });
+    }).then(closeModal);
   };
 
   return (
@@ -89,13 +86,13 @@ const DeleteAlert: React.FC<DeleteAlertProps> = ({
       </DialogContent>
 
       <DialogActions className={classes.dialogActions}>
-        {removedAddedMenuItem.loading ? (
+        {removedMenuItem.loading ? (
           <div className={classes.spinnerWrapper}>
             <CircularProgress />
           </div>
         ) : (
           <>
-            <Button onClick={() => setOpen(false)} variant="contained">
+            <Button onClick={closeModal} variant="contained">
               Cancel
             </Button>
 

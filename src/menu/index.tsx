@@ -7,8 +7,8 @@ import MenuItemList from 'menu/menu-item-list';
 import AddMenuItem from 'menu/add-menu-item';
 import EditMenuItem from 'menu/edit-menu-item';
 
-import { GET_MENU_ITEMS } from './menu-queries-and-mutations';
-import { MenuItemListData } from './menu.types';
+import { GET_MENU_ITEMS } from 'menu/menu-queries-and-mutations';
+import { MenuItemListData } from 'menu/menu.types';
 
 const useStyles = makeStyles({
   menuHeader: {

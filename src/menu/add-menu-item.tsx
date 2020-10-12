@@ -1,45 +1,26 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
+import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
+
 import {
-  Button,
-  CircularProgress,
-  FormControl,
-  InputLabel,
-  makeStyles,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from '@material-ui/core';
+  CREATE_MENU_ITEM,
+  GET_MENU_ITEMS,
+} from 'menu/menu-queries-and-mutations';
 
-import { CREATE_MENU_ITEM, GET_MENU_ITEMS } from './menu-queries-and-mutations';
+import MenuItemForm from 'menu/components/menu-item-form';
 
-import { MenuItemListData } from './menu.types';
+import { ItemType, MenuItemListData } from 'menu/menu.types';
 
-const useStyles = makeStyles({
-  addHeader: {
-    marginBottom: 30,
-  },
-  addWrapper: { padding: '50px 150px' },
-  spinnerWrapper: {
-    height: 400,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  formWarpper: {
-    display: 'flex',
-    flexDirection: 'column',
-    maxWidth: 500,
-    marginBottom: 30,
-  },
-});
-
-enum ItemType {
-  MAIN_COURSE = 'MAIN_COURSE',
-  SIDE = 'SIDE',
-}
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    addHeader: { marginBottom: 30 },
+    addWrapper: {
+      padding: '50px 150px',
+      [theme.breakpoints.down('sm')]: { padding: 25 },
+    },
+  })
+);
 
 const AddMenuItem = () => {
   const classes = useStyles();
@@ -78,74 +59,18 @@ const AddMenuItem = () => {
         Add Menu Item
       </Typography>
 
-      <form autoComplete="off" onSubmit={handleSubmit}>
-        <div className={classes.formWarpper}>
-          <FormControl required fullWidth>
-            <InputLabel id="menu-item-type">Type</InputLabel>
-            <Select
-              labelId="menu-item-type"
-              id="menu-item-type-select"
-              MenuProps={{
-                anchorOrigin: {
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                },
-                getContentAnchorEl: null,
-              }}
-              value={itemType}
-              onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
-                setItemType(event.target.value as ItemType);
-              }}
-            >
-              <MenuItem value={ItemType.MAIN_COURSE}>Main Course</MenuItem>
-              <MenuItem value={ItemType.SIDE}>Side</MenuItem>
-            </Select>
-          </FormControl>
-
-          <TextField
-            required
-            label="Name"
-            value={itemName}
-            onChange={(
-              event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-            ) => setItemName(event.target.value)}
-          />
-          <TextField
-            required
-            label="Price"
-            value={itemPrice}
-            type="number"
-            InputProps={{
-              inputProps: { min: 1 },
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'e') {
-                event.preventDefault();
-              }
-            }}
-            onChange={(
-              event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-            ) => {
-              const numericValue = Number(event.target.value);
-
-              if (numericValue > 0 && event.target) {
-                setItemPrice(numericValue);
-              } else {
-                setItemPrice(undefined);
-              }
-            }}
-          />
-        </div>
-
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          disabled={newAddedMenuItem.loading}
-        >
-          {newAddedMenuItem.loading ? <CircularProgress /> : 'Save Item'}
-        </Button>
-      </form>
+      <MenuItemForm
+        {...{
+          handleSubmit,
+          isSaving: newAddedMenuItem.loading,
+          itemType,
+          setItemType,
+          itemName,
+          setItemName,
+          itemPrice,
+          setItemPrice,
+        }}
+      />
     </div>
   );
 };

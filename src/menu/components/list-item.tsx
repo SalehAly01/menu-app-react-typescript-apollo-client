@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Card,
   CardActionArea,
@@ -15,7 +16,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteAlert from 'menu/components/delete-menu-item-alert';
 
 import { MenuItem } from 'menu/menu.types';
-import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
   itemInfo: {
@@ -57,7 +57,8 @@ const ListItem: React.FC<Omit<MenuItem, '__typename'>> = (props) => {
               color="textSecondary"
               className={classes.itemInfo}
             >
-              {type} <span>{price}$</span>
+              {type}
+              <span>{price}$</span>
             </Typography>
 
             <Typography
@@ -74,6 +75,7 @@ const ListItem: React.FC<Omit<MenuItem, '__typename'>> = (props) => {
                 >
                   <EditIcon />
                 </IconButton>
+
                 <IconButton
                   aria-label="Delete menu item"
                   onClick={() => setDeleteAlertOpen(true)}
